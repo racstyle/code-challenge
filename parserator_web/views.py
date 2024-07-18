@@ -17,15 +17,13 @@ class AddressParse(APIView):
         # TODO: Flesh out this method to parse an address string using the
         # parse() method and return the parsed components to the frontend.
         
-        # print('request:', request)
+        input_string = request.GET.get('address')    # get the input from the front-end
+        print('request string:', input_string)
         
-        requestJson = request.GET.get('address')
-        print('json:', requestJson)
-        
-        print('running parse:', self.parse(requestJson))
+        print('running parse:', self.parse(input_string))
         
             
-        return Response({'placeholder': 'placeholder return'})
+        return Response({'input_string': input_string})
 
     def parse(self, address):
         # TODO: Implement this method to return the parsed components of a
@@ -33,8 +31,24 @@ class AddressParse(APIView):
         
         print('address:', address)
         
-        # address_components = usaddress.parse(address)
-        # address_type = usaddress.tag(address)
+        # init
+        address_components = []     # address broken down into components (list)
+        address_type = []           # address component type (list)
+        parsedAddr = {}             # address parsed (dictionary)
         
-        return
-        # return address_components, address_type
+        # try parsing the address input
+        try:
+            parsedAddr = usaddress.tag(address)[0]
+            
+            print(parsedAddr)
+            
+            address_components = list(parsedAddr.values())
+            address_type = list(parsedAddr.keys())
+            
+            print('components:', address_components)
+            print('type:', address_type)
+        except:
+            print('Error parsing the address input')
+        
+        return address_components, address_type
+        
