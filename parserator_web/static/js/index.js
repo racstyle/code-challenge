@@ -4,22 +4,16 @@
 // function to display the parsed address
 'use strict'
 function displayParsedAddr (parsedAddr) {
-  
-  console.log('running display func')
-  
-  console.log(parsedAddr)
-  
   var address_components = parsedAddr['address_components']
   var resultsDiv = document.getElementById('address-results')
   var errorDivPlaceholder = document.getElementById('address-error')
-  
+
   // if there is an error parsing
   if (address_components == null) {
-    console.log('nothing')
-    
     // "parent" div to put error underneath
-    resultsDiv.style.display = 'none'  // hide results table if parsing again
-    
+    // hide results table if parsing again
+    resultsDiv.style.display = 'none'
+
     // error div
     var errorDivNew = document.createElement('div')
     errorDivNew.innerHTML = 'Unable to parse this value due to repeated labels. Our team has been notified of the error.'
@@ -72,12 +66,7 @@ addressForm.addEventListener('submit', function (event) {
 
   // parse the input to be readable JSON
   var data = new FormData(addressForm)
-  var dataObj = {}
-  for (var key=0; key<data.length; key++) {
-    dataObj[key] = data[key]
-  }
-  // data.forEach((value, key) => dataObj[key] = value)  // this includes CSRF token
-  var parsedInput = dataObj['address']  // we only want the address input
+  var parsedInput = data.get('address')  // get the front-end address input
 
   // try sending input to API backend
   try {
@@ -87,8 +76,6 @@ addressForm.addEventListener('submit', function (event) {
     var res = fetch(apiURL).then(function (response) {
       return response.json()
     })
-
-    console.log(res)
 
     // display parsed address
     displayParsedAddr(res)

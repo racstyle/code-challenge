@@ -17,8 +17,11 @@ class AddressParse(APIView):
         # TODO: Flesh out this method to parse an address string using the
         # parse() method and return the parsed components to the frontend.
 
+        print('Getting the input...')
+
         # get the input from the front-end
         input_string = request.GET.get('address')
+        print('Got the user input')
 
         # initializing
         address_components = {}
@@ -42,7 +45,7 @@ class AddressParse(APIView):
         # TODO: Implement this method to return the parsed components of a
         # given address using usaddress: https://github.com/datamade/usaddress
 
-        print('address:', address)
+        print('Parsing the address input...')
 
         # init
         apiResponse = {}            # USAddress API response (dictionary)
@@ -61,8 +64,7 @@ class AddressParse(APIView):
             # second item is input type
             address_type = apiResponse[1]
 
-            print('components:', address_components)
-            print('type:', address_type)
+            print('Successfully parsed the address input')
 
             return address_components, address_type
         except Exception:
