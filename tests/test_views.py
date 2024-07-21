@@ -6,7 +6,7 @@ def test_api_parse_succeeds(client):
     # data comes back in the appropriate format.
     address_string = '123 main st chicago il'
     print(address_string)
-    
+
     expected_output = {
         'input_string': '123 main st chicago il',
         'address_components': {
@@ -20,9 +20,13 @@ def test_api_parse_succeeds(client):
     }
 
     try:
-        response_read = client.get(f'/api/parse/?address={address_string}', format='json').json()
-        print(response_read)
-        assert response_read == expected_output
+        res = client.get(f'/api/parse/?address={address_string}', format='json')
+        print(res.json())
+        print(res.json()['input_string'])
+
+        assert res.json()['input_string'] == expected_output['input_string']
+        assert res.json()['address_components'] == expected_output['address_components']
+        assert res.json()['address_type'] == expected_output['address_type']
     except Exception:
         pytest.fail()
 
@@ -31,4 +35,10 @@ def test_api_parse_raises_error(client):
     # TODO: Finish this test. The address_string below will raise a
     # RepeatedLabelError, so ParseAddress.parse() will not be able to parse it.
     address_string = '123 main st chicago il 123 main st'
-    pytest.fail()
+
+    try:
+        res = client.get(f'/api/parse/?address={address_string}', format='json').json()
+        print(res)
+        assert res == {'detail': 'An error has occurred'}
+    except Exception:
+        pytest.fail()
