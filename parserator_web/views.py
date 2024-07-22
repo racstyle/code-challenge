@@ -25,6 +25,10 @@ class AddressParse(APIView):
         address_components = {}
         address_type = ''
 
+        # first check if input is empty
+        if input_string == '':
+            return Response({'input_string': ''})
+
         # parse the input
         address_components, address_type = self.parse(input_string)
         print('address_components:', address_components)
@@ -65,8 +69,8 @@ class AddressParse(APIView):
             address_type = apiResponse[1]
 
             print('Successfully parsed the address input, exiting...')
-
             return address_components, address_type
+
         except Exception:
             print('Error parsing the address input')
             return None, None

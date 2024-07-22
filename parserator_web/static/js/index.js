@@ -6,14 +6,37 @@ function displayParsedAddr(parsedAddr) {
   console.log('%cInside display function...', "color:cyan;");
   
   var address_components = parsedAddr['address_components'];
+  var input_string = parsedAddr['input_string'];
   var resultsDiv = document.getElementById('address-results');
   var errorDivPlaceholder = document.getElementById('address-error');
   
   console.log('Pulled address_components:', parsedAddr['address_components']);
   console.log('Pulled address_type:', parsedAddr['address_type']);
+
+  // if the input is empty
+  if (input_string!=null && input_string.length==0) {
+    console.error('The input string is empty.');
+
+    // if there is an existing error div, delete it to prevent element duplication
+    if (errorDivPlaceholder) { errorDivPlaceholder.remove(); }
+
+    // "parent" div to put error underneath hide results table if parsing again
+    resultsDiv.style.display = 'none';
+
+    // error div
+    var errorDivNew = document.createElement('div');
+    errorDivNew.innerHTML = 'Please provide a value to parse.';
+    errorDivNew.setAttribute('id', 'address-error');
+    errorDivNew.setAttribute('class', 'alert alert-danger');
+
+    // add error div to HTML
+    resultsDiv.parentNode.appendChild(errorDivNew);
+
+    return;
+  }
   
   // if there is an error parsing
-  if (address_components == null) {
+  else if (address_components == null) {
     console.error('There is a problem with the parsed input.');
   
     // if there is an existing error div, delete it to prevent element duplication
