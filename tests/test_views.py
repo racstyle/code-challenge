@@ -23,7 +23,8 @@ def test_api_parse_succeeds(client):
     # and address_type
     try:
         res = client.get(f'/api/parse/?address={address_string}', format='json')
-
+        print(res)
+        
         assert res.json()['input_string'] == expected_output['input_string']
         assert res.json()['address_components'] == expected_output['address_components']
         assert res.json()['address_type'] == expected_output['address_type']

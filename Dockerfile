@@ -8,6 +8,7 @@ FROM python:3.8
 
 # Add the NodeSource PPA
 # (see: https://github.com/nodesource/distributions/blob/master/README.md)
+# NOTE: changed version to resolve 'npm not found' error
 RUN curl -sL https://deb.nodesource.com/setup_22.x | bash -
 
 # Install any additional OS-level packages you need via apt-get. RUN statements
